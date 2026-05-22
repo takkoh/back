@@ -11,7 +11,7 @@ const pool = require('../database/conexionBD');
 const findByUsername = async (nombre_usuario) => {
   const [rows] = await pool.execute(
     `SELECT u.*, p.nombre AS nombre_personal
-     FROM usuario u
+    FROM Usuario u
      LEFT JOIN personal p ON p.id = u.personal_id
      WHERE u.nombre_usuario = ?`,
     [nombre_usuario]
@@ -29,7 +29,7 @@ const findById = async (id) => {
   const [rows] = await pool.execute(
     `SELECT u.id, u.nombre_usuario, u.rol, u.personal_id,
             p.nombre AS nombre_personal
-     FROM usuario u
+    FROM Usuario u
      LEFT JOIN personal p ON p.id = u.personal_id
      WHERE u.id = ?`,
     [id]
@@ -49,7 +49,7 @@ const findById = async (id) => {
  */
 const createUsuario = async ({ nombre_usuario, password_hash, rol, personal_id }) => {
   const [result] = await pool.execute(
-    `INSERT INTO usuario (nombre_usuario, password, rol, personal_id)
+    `INSERT INTO Usuario (nombre_usuario, password, rol, personal_id)
      VALUES (?, ?, ?, ?)`,
     [nombre_usuario, password_hash, rol, personal_id || null]
   );
@@ -64,7 +64,7 @@ const getAllUsuarios = async () => {
   const [rows] = await pool.execute(
     `SELECT u.id, u.nombre_usuario, u.rol, u.personal_id,
             p.nombre AS nombre_personal, u.created_at
-     FROM usuario u
+    FROM Usuario u
      LEFT JOIN personal p ON p.id = u.personal_id
      ORDER BY u.id`
   );
@@ -80,7 +80,7 @@ const getAllUsuarios = async () => {
  */
 const updatePassword = async (id, password_hash) => {
   const [result] = await pool.execute(
-    `UPDATE usuario SET password = ? WHERE id = ?`,
+    `UPDATE Usuario SET password = ? WHERE id = ?`,
     [password_hash, id]
   );
   return result.affectedRows;
@@ -93,7 +93,7 @@ const updatePassword = async (id, password_hash) => {
  */
 const deleteUsuario = async (id) => {
   const [result] = await pool.execute(
-    `DELETE FROM usuario WHERE id = ?`,
+    `DELETE FROM Usuario WHERE id = ?`,
     [id]
   );
   return result.affectedRows;
